@@ -1,10 +1,22 @@
 import { Request, Response } from 'express'
 import { UserServices } from './user.service'
+import userValidationSchema from './user.validation'
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const { user: userData } = req.body
+
+    const { error } = userValidationSchema.validate(userData)
+
     const result = await UserServices.createUserIntoDB(userData)
+
+    if (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+        error: error.details,
+      })
+    }
 
     res.status(200).json({
       success: true,
@@ -74,7 +86,7 @@ const deleteStudent = async (req: Request, res: Response) => {
       message: 'User deleted successfully!',
       data: result,
     })
-  } catch (error:any) {
+  } catch (error: any) {
     res.status(400).json({
       success: false,
       message: error.message,

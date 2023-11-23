@@ -1,35 +1,30 @@
 import { Schema, model } from 'mongoose'
-import { User } from './user/user.interface'
+import { Order, User } from './user/user.interface'
+
+const orderSchema = new Schema<Order>({
+  productName: { type: String },
+  price: { type: Number },
+  quantity: { type: Number },
+})
 
 const userSchema = new Schema<User>({
   userId: { type: Number, required: true },
   username: { type: String },
   password: { type: String, required: true },
   fullName: {
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+    firstName: { type: String },
+    lastName: { type: String },
   },
   age: { type: Number },
   email: { type: String, required: true },
   isActive: Boolean,
-  hobbies: ['reading', 'traveling'],
+  hobbies: { type: Array<string> },
   address: {
     street: { type: String },
     city: { type: String },
     country: { type: String },
   },
-  orders: [
-    {
-      productName: { type: String },
-      price: { type: Number },
-      quantity: { type: Number },
-    },
-    {
-      productName: { type: String },
-      price: { type: Number },
-      quantity: { type: Number },
-    },
-  ],
+  orders: [orderSchema],
   isDeleted: {
     type: Boolean,
     default: false,
