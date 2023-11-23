@@ -30,6 +30,24 @@ const userSchema = new Schema<User>({
       quantity: { type: Number },
     },
   ],
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
+})
+
+userSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } })
+  next()
+})
+userSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } })
+  next()
+})
+
+userSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } })
+  next()
 })
 
 export const UserModel = model<User>('User', userSchema)
