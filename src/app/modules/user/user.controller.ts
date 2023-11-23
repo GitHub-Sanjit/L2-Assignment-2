@@ -11,7 +11,7 @@ const createUser = async (req: Request, res: Response) => {
       message: 'User created successfully!',
       data: result,
     })
-  } catch (error: any) {
+  } catch (error) {
     res.status(400).json({
       success: false,
       message: error.message,
@@ -32,7 +32,30 @@ const getAllStudents = async (req: Request, res: Response) => {
       message: 'User are retrieved successfully!',
       data: result,
     })
-  } catch (error: any) {
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+      error: {
+        code: 400,
+        description: 'Something went wrong',
+      },
+    })
+  }
+}
+
+const getSingleStudent = async (req: Request, res: Response) => {
+  try {
+
+    const {userId} = req.params
+    const result = await UserServices.getSingleUserFromDB(userId)
+
+    res.status(200).json({
+      success: true,
+      message: 'A Single User is retrieved successfully!',
+      data: result,
+    })
+  } catch (error) {
     res.status(400).json({
       success: false,
       message: error.message,
@@ -47,4 +70,5 @@ const getAllStudents = async (req: Request, res: Response) => {
 export const UserControllers = {
   createUser,
   getAllStudents,
+  getSingleStudent,
 }
