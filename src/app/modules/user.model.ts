@@ -2,16 +2,16 @@ import { Schema, model } from 'mongoose'
 import { User } from './user/user.interface'
 
 const userSchema = new Schema<User>({
-  userId: { type: String, required: true },
+  userId: { type: Number, required: true },
   username: { type: String },
-  password: { type: Number, required: true },
+  password: { type: String, required: true },
   fullName: {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
   },
   age: { type: Number },
   email: { type: String, required: true },
-  isActive: true,
+  isActive: Boolean,
   hobbies: ['reading', 'traveling'],
   address: {
     street: { type: String },

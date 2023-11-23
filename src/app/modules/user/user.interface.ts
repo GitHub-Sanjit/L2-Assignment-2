@@ -1,9 +1,9 @@
 // import { Schema, model, connect } from 'mongoose'
 
 export type User = {
-  userId: string
+  userId: number
   username: string
-  password: number
+  password: string
   fullName: {
     firstName: string
     lastName: string
