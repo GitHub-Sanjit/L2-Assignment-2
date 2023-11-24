@@ -11,7 +11,7 @@ const getAllUsersFromDB = async () => {
   return result
 }
 
-const getSingleUserFromDB = async (userId: string) => {
+const getSingleUserFromDB = async (userId: number) => {
   const result = await UserModel.findOne({ userId })
   return result
 }
@@ -25,8 +25,13 @@ const updateUser = async (userId: number, userData: User) => {
   return result
 }
 
-const deleteUserFromDB = async (userId: string) => {
+const deleteUserFromDB = async (userId: number) => {
   const result = await UserModel.updateOne({ userId }, { isDeleted: true })
+  return result
+}
+
+const getUserOrders = async (userId: number) => {
+  const result = await UserModel.findOne({ userId }).select({ orders: 1 })
   return result
 }
 
@@ -36,4 +41,5 @@ export const UserServices = {
   getSingleUserFromDB,
   updateUser,
   deleteUserFromDB,
+  getUserOrders,
 }

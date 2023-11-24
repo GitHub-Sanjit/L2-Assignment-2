@@ -1,7 +1,7 @@
 
 import { Model } from "mongoose"
 
-export type Order = {
+export type IOrder = {
   productName: string
   price: number
   quantity: number
@@ -24,7 +24,7 @@ export interface User  {
     city?: string
     country?: string
   }
-  orders: Order[]
+  orders: IOrder[]
   isDeleted: boolean
 }
 

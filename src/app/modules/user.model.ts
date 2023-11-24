@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose'
-import { Order, User, IUserModel } from './user/user.interface'
+import { IOrder, User, IUserModel } from './user/user.interface'
 
-const orderSchema = new Schema<Order>({
+const orderSchema = new Schema<IOrder>({
   productName: { type: String },
   price: { type: Number },
   quantity: { type: Number },
@@ -24,7 +24,7 @@ const userSchema = new Schema<User>({
     city: { type: String },
     country: { type: String },
   },
-  orders: [orderSchema],
+  orders: { type: [orderSchema], default: [] },
   isDeleted: {
     type: Boolean,
     default: false,
@@ -50,4 +50,4 @@ userSchema.statics.isUserExist = async function (userId) {
   return result !== null ? true : false
 }
 
-export const UserModel = model<User,IUserModel>('User', userSchema)
+export const UserModel = model<User, IUserModel>('User', userSchema)
