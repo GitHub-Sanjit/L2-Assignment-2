@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { Order, User } from './user/user.interface'
+import { Order, User, IUserModel } from './user/user.interface'
 
 const orderSchema = new Schema<Order>({
   productName: { type: String },
@@ -45,4 +45,9 @@ userSchema.pre('aggregate', function (next) {
   next()
 })
 
-export const UserModel = model<User>('User', userSchema)
+userSchema.statics.isUserExist = async function (userId) {
+  const result = await UserModel.findOne({ userId: userId })
+  return result !== null ? true : false
+}
+
+export const UserModel = model<User,IUserModel>('User', userSchema)

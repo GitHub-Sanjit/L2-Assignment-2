@@ -1,4 +1,5 @@
-// import { Schema, model, connect } from 'mongoose'
+
+import { Model } from "mongoose"
 
 export type Order = {
   productName: string
@@ -6,7 +7,7 @@ export type Order = {
   quantity: number
 }
 
-export type User = {
+export interface User  {
   userId: number
   username?: string
   password: string
@@ -25,4 +26,9 @@ export type User = {
   }
   orders: Order[]
   isDeleted: boolean
+}
+
+export interface IUserModel extends Model<User>{
+  // eslint-disable-next-line no-unused-vars
+  isUserExist(userId: number): Promise<boolean>;
 }
