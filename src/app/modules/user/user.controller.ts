@@ -154,6 +154,48 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 }
 
+const addAOrder = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId)
+    const userExist = await UserModel.isUserExist(userId)
+    if (!userExist) {
+      res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      })
+      return
+    }
+    const orderData = req.body
+    const { error, value } = userValidationSchema.validate(orderData)
+
+    if (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: error.details,
+      })
+    } else {
+      await UserServices.addOrderIntoAUserDB(userId, value)
+
+      res.status(200).json({
+        success: true,
+        message: 'Order created successfully!',
+        data: null,
+      })
+    }
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong',
+      error: error,
+    })
+  }
+}
+
 const getUserOrders = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = parseInt(req.params.userId)
@@ -189,11 +231,48 @@ const getUserOrders = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
+const getTotalPrice = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId)
+    // check user exist or not
+    const userExist = await UserModel.isUserExist(userId)
+
+    // if user not exist
+    if (!userExist) {
+      res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      })
+      return
+    }
+
+    // if user exist
+    const result = await UserServices.getTotalPrice(userId)
+    res.status(200).json({
+      success: true,
+      message: 'Total price calculated successfully!',
+      data: result,
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong',
+      error: error,
+    })
+  }
+}
+
 export const UserControllers = {
   createUser,
   getAllUsers,
   getSingleUser,
   updateUser,
   deleteUser,
+  addAOrder,
   getUserOrders,
+  getTotalPrice,
 }

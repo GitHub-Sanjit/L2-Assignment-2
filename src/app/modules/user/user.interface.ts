@@ -28,7 +28,11 @@ export interface User  {
   isDeleted: boolean
 }
 
-export interface IUserModel extends Model<User>{
+export interface IUserModel extends Model<User> {
   // eslint-disable-next-line no-unused-vars
-  isUserExist(userId: number): Promise<boolean>;
+  isUserExist(userId: number): Promise<boolean>
+  // eslint-disable-next-line no-unused-vars
+  addAOrder(userId: number, Order: IOrder): Promise<void>
+  // eslint-disable-next-line no-unused-vars
+  calculateTotalPrice(userId: number): Promise<number>
 }
