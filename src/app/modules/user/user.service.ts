@@ -19,7 +19,7 @@ const getSingleUserFromDB = async (userId: number) => {
 const updateUser = async (userId: number, userData: User) => {
   const result = await UserModel.findOneAndUpdate(
     { userId: userId },
-    userData,
+    { $set: userData },
     { new: true },
   )
   return result

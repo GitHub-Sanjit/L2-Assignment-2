@@ -199,10 +199,8 @@ const addAOrder = async (req: Request, res: Response) => {
 const getUserOrders = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = parseInt(req.params.userId)
-    // check user exist or not
     const userExist = await UserModel.isUserExist(userId)
 
-    // if user not exist
     if (!userExist) {
       res.status(404).json({
         success: false,
@@ -215,7 +213,6 @@ const getUserOrders = async (req: Request, res: Response): Promise<void> => {
       return
     }
 
-    // if user exist
     const result = await UserServices.getUserOrders(userId)
     res.status(200).json({
       success: true,
@@ -234,10 +231,8 @@ const getUserOrders = async (req: Request, res: Response): Promise<void> => {
 const getTotalPrice = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId)
-    // check user exist or not
     const userExist = await UserModel.isUserExist(userId)
 
-    // if user not exist
     if (!userExist) {
       res.status(404).json({
         success: false,
@@ -250,7 +245,6 @@ const getTotalPrice = async (req: Request, res: Response) => {
       return
     }
 
-    // if user exist
     const result = await UserServices.getTotalPrice(userId)
     res.status(200).json({
       success: true,
