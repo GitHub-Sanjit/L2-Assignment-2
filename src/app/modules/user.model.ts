@@ -72,39 +72,5 @@ userSchema.statics.isUserExist = async function (userId) {
   return result !== null ? true : false
 }
 
-userSchema.statics.addAOrder = async function (userId, order) {
-  const user = await UserModel.findOne({ userId })
-  if (user) {
-    user.orders = user.orders || []
-    user.orders.push(order)
-    await user.save()
-  }
-}
-
-userSchema.statics.calculateTotalPrice = async function (userId) {
-  const result = await UserModel.aggregate([
-    {
-      $match: { userId: userId },
-    },
-    {
-      $unwind: '$orders',
-    },
-    {
-      $group: {
-        _id: '$userId',
-        totalPrice: {
-          $sum: { $multiply: ['$orders.price', '$orders.quantity'] },
-        },
-      },
-    },
-    {
-      $project: {
-        _id: 0,
-        totalPrice: 1,
-      },
-    },
-  ])
-  return result[0]?.totalPrice || 0
-}
 
 export const UserModel = model<User, IUserModel>('User', userSchema)

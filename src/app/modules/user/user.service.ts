@@ -1,5 +1,5 @@
 import { UserModel } from '../user.model'
-import { IOrder, User } from './user.interface'
+import { User } from './user.interface'
 
 const createUserIntoDB = async (user: User) => {
   const result = await UserModel.create(user)
@@ -30,8 +30,17 @@ const deleteUserFromDB = async (userId: number) => {
   return result
 }
 
-const addOrderIntoAUserDB = async (userId: number, order: IOrder) => {
-  await UserModel.addAOrder(userId, order)
+const addOrderIntoAUserDB = async (
+  userId: number,
+  order: { productName: string; price: number; quantity: number },
+) => {
+  const { productName, price, quantity } = order
+  const res = UserModel.findOneAndUpdate(
+    { userId, orders: { $exist: true } },
+    { $push: { order: { productName, price, quantity } } },
+    { upsert: true, new: true },
+  )
+  return res
 }
 
 const getUserOrders = async (userId: number) => {
@@ -40,8 +49,29 @@ const getUserOrders = async (userId: number) => {
 }
 
 const getTotalPrice = async (userId: number) => {
-  const result = await UserModel.calculateTotalPrice(userId)
-  return { totalPrice: result }
+  const result = await UserModel.aggregate([
+    {
+      $match: { userId: userId },
+    },
+    {
+      $unwind: '$orders',
+    },
+    {
+      $group: {
+        _id: '$userId',
+        totalPrice: {
+          $sum: { $multiply: ['$orders.price', '$orders.quantity'] },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        totalPrice: 1,
+      },
+    },
+  ])
+  return result[0]?.totalPrice || 0
 }
 
 export const UserServices = {
