@@ -11,7 +11,7 @@ const orderSchema = new Schema<IOrder>({
 
 const userSchema = new Schema<User>(
   {
-    userId: { type: Number, required: true },
+    userId: { type: Number, required: true, unique: true },
     username: { type: String },
     password: { type: String, required: true },
     fullName: {
@@ -71,6 +71,5 @@ userSchema.statics.isUserExist = async function (userId) {
   const result = await UserModel.findOne({ userId: userId })
   return result !== null ? true : false
 }
-
 
 export const UserModel = model<User, IUserModel>('User', userSchema)
