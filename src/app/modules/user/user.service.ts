@@ -18,10 +18,20 @@ const getSingleUserFromDB = async (userId: number) => {
 
 const updateUser = async (userId: number, userData: User) => {
   const result = await UserModel.findOneAndUpdate(
-    { userId: userId },
+    { userId },
     { $set: userData },
     { new: true },
-  )
+  ).select({
+    _id: 0,
+    userId: 1,
+    username: 1,
+    fullName: 1,
+    age: 1,
+    email: 1,
+    isActive: 1,
+    hobbies: 1,
+    address: 1,
+  })
   return result
 }
 

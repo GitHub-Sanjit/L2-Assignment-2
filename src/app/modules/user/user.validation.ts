@@ -27,6 +27,8 @@ const userValidationSchema = Joi.object({
       'swimming',
       'writing',
       'cooking',
+      'yoga',
+      'hiking',
     ),
   ),
   address: Joi.object({

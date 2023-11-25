@@ -7,7 +7,6 @@ const createUser = async (req: Request, res: Response) => {
   try {
     const { user: userData } = req.body
     const { error } = userValidationSchema.validate(userData)
-    const result = await UserServices.createUserIntoDB(userData)
 
     if (error) {
       res.status(400).json({
@@ -15,7 +14,9 @@ const createUser = async (req: Request, res: Response) => {
         message: error.message,
         error: error.details,
       })
+      return
     }
+    const result = await UserServices.createUserIntoDB(userData)
 
     res.status(200).json({
       success: true,
