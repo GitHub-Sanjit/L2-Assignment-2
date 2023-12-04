@@ -1,6 +1,8 @@
-import Joi from 'joi'
+// import Joi from 'joi';
+import Joi from 'joi';
 
-const orderValidationSchema = Joi.object({
+
+export const orderValidationSchema = Joi.object({
   productName: Joi.string().required(),
   price: Joi.number().positive().required(),
   quantity: Joi.number().integer().positive().required(),

@@ -45,12 +45,12 @@ const addOrderIntoAUserDB = async (
   order: { productName: string; price: number; quantity: number },
 ) => {
   const { productName, price, quantity } = order
-  const res = UserModel.findOneAndUpdate(
-    { userId, orders: { $exist: true } },
+  await UserModel.findOneAndUpdate(
+    { userId, orders: { $exists: true } },
     { $push: { order: { productName, price, quantity } } },
     { upsert: true, new: true },
   )
-  return res
+  return null
 }
 
 const getUserOrders = async (userId: number) => {

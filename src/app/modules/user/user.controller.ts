@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
 import { UserServices } from './user.service'
-import userValidationSchema from './user.validation'
+import userValidationSchema, { orderValidationSchema } from './user.validation'
 import { UserModel } from '../user.model'
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const { user: userData } = req.body
-    const { error } = userValidationSchema.validate(userData)
+    const user = req.body
+    const { error } = userValidationSchema.validate(user)
 
     if (error) {
       res.status(400).json({
@@ -16,7 +16,7 @@ const createUser = async (req: Request, res: Response) => {
       })
       return
     }
-    const result = await UserServices.createUserIntoDB(userData)
+    const result = await UserServices.createUserIntoDB(user)
 
     res.status(200).json({
       success: true,
@@ -158,6 +158,7 @@ const deleteUser = async (req: Request, res: Response) => {
 const addAOrder = async (req: Request, res: Response) => {
   try {
     const userId = parseInt(req.params.userId)
+    console.log(userId);
     const userExist = await UserModel.isUserExist(userId)
     if (!userExist) {
       res.status(404).json({
@@ -171,13 +172,14 @@ const addAOrder = async (req: Request, res: Response) => {
       return
     }
     const orderData = req.body
-    const { error, value } = userValidationSchema.validate(orderData)
+    const { error, value } = orderValidationSchema.validate(orderData)
+    console.log(value);
 
     if (error) {
       res.status(500).json({
         success: false,
         message: error.message,
-        error: error.details,
+        error: {error},
       })
     } else {
       await UserServices.addOrderIntoAUserDB(userId, value)
@@ -185,14 +187,14 @@ const addAOrder = async (req: Request, res: Response) => {
       res.status(200).json({
         success: true,
         message: 'Order created successfully!',
-        data: null,
+        data: value,
       })
     }
   } catch (error: any) {
     res.status(500).json({
       success: false,
       message: error.message || 'Something went wrong',
-      error: error,
+      error: {error},
     })
   }
 }
