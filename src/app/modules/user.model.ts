@@ -21,7 +21,7 @@ const userSchema = new Schema<User>(
     age: { type: Number },
     email: { type: String, required: true },
     isActive: Boolean,
-    hobbies: Array<string>,
+    hobbies: { type: [String], required: true },
     address: {
       street: { type: String },
       city: { type: String },

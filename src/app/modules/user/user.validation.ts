@@ -19,20 +19,7 @@ const userValidationSchema = Joi.object({
   age: Joi.number().integer().optional(),
   email: Joi.string().email().required(),
   isActive: Joi.boolean().optional(),
-  hobbies: Joi.array().items(
-    Joi.string().valid(
-      'reading',
-      'traveling',
-      'photography',
-      'gardening',
-      'painting',
-      'swimming',
-      'writing',
-      'cooking',
-      'yoga',
-      'hiking',
-    ),
-  ),
+  hobbies: Joi.array().items()                       ,//z.array(z.string()),
   address: Joi.object({
     street: Joi.string().allow('').optional(),
     city: Joi.string().allow('').optional(),
